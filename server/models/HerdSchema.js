@@ -2,9 +2,18 @@ const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
 const fylker = {
-    "Area1": ["Province1", "Province2"],
-    "Area2": ["Province2", "Province3"],
-    "Area3": ["Province3", "Province4"],
+    "Nord-Troms": ["Troms og Finnmark"],
+    "Sør-Troms": ["Troms og Finnmark"],
+    "Setesdal": ["Agder"],
+    "Hardangervidda": ["Viken", "Vestland"],
+    "Sørlandet": ["Agder"],
+    "Røros": ["Trøndelag"],
+    "Tydal": ["Trøndelag"],
+    "Kautokeino": ["Troms og Finnmark"],
+    "Finnmarksvidda": ["Troms og Finnmark"],
+    "Helgeland": ["Nordland"],
+    "Saltfjellet": ["Nordland"],
+    "Lofoten": ["Nordland"],
 };
 
 const HerdSchema = new Schema({
@@ -27,7 +36,6 @@ HerdSchema.pre("save", function (next) {
     
     next();
 });
-
 
 const Herd = model("Herd", HerdSchema);
 module.exports = Herd;

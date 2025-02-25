@@ -3,7 +3,7 @@ const router = express.Router();
 const raindeerController = require('../controllers/raindeerController.js');
 
 
-router.get("/", raindeerController.getAllRaindeers);
+router.get("/", raindeerController.getAllRaindeer);
 router.post("/", raindeerController.registerRaindeer);
 
 router.get("/:id", raindeerController.getRaindeer);

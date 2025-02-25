@@ -1,0 +1,11 @@
+form {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    gap: 25px;
+}
+
+.select-div {
+    display: flex;
+    gap: 10px;
+}

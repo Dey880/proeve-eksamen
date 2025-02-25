@@ -1,0 +1,24 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Main group with white strokes -->
+  <g stroke="white" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Reindeer Head -->
+    <circle cx="100" cy="130" r="50"/>
+    
+    <!-- Left Antler -->
+    <path d="M65,95 C40,60, 30,40, 60,20"/>
+    <!-- Right Antler -->
+    <path d="M135,95 C160,60, 170,40, 140,20"/>
+    
+    <!-- Left Antler Branch -->
+    <path d="M55,70 C50,65, 45,65, 47,60"/>
+    <!-- Right Antler Branch -->
+    <path d="M145,70 C150,65, 155,65, 153,60"/>
+    
+    <!-- Mouth -->
+    <path d="M90,150 Q100,155 110,150"/>
+  </g>
+  
+  <!-- Eyes (filled white for a subtle detail) -->
+  <circle cx="90" cy="125" r="4" fill="white" stroke="none"/>
+  <circle cx="110" cy="125" r="4" fill="white" stroke="none"/>
+</svg>

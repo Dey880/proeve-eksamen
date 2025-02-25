@@ -28,8 +28,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/herd', herdRoutes);
 app.use('/api/raindeer', raindeerRoutes);
 
+app.use("/uploads", express.static("uploads"));
+
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-app.listen(process.env.PORT)
+app.listen(process.env.PORT);

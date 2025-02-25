@@ -1,2 +1,7 @@
+# gitignore
 .env
 node_modules
+/uploads/*
+
+# gitpleasedonotignore
+!/uploads/placeholder.svg

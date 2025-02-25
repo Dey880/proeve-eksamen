@@ -7,7 +7,6 @@ const UserSchema = new Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     language: { type: String },
-    herds: { type: mongoose.Schema.Types.ObjectId, ref: "Herd" },
     phone: { type: String },
 });
 

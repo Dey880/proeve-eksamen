@@ -3,13 +3,13 @@ const Herd = require("../models/HerdSchema.js");
 const User = require("../models/UserSchema");
 
 const raindeerController = {
-    getAllRaindeers: (async (req, res) => {
+    getAllRaindeer: (async (req, res) => {
         try {
             const raindeer = await Raindeer.find();
-            if (raindeer.length > 0) {
-                res.status(200).send({ msg: "Raindeers found", raindeer: raindeer });
+            if (raindeer.length > 0) 
+                {res.status(200).send({ msg: "Raindeer found", raindeer: raindeer });
             } else {
-                res.status(404).send({ msg: "No raindeers found" });
+                res.status(404).send({ msg: "No raindeer found" });
             }
         } catch (error) {
             console.error(error);
@@ -17,30 +17,20 @@ const raindeerController = {
         }
     }),
     registerRaindeer: (async (req, res) => {
-        const {owner, serialnumber, name, serieinndeling, dateofbirth } = req.body;
+        const {owner, serialNumber, name, dateOfBirth, flokk } = req.body;
         try {
-            let ownerid = await User.findOne({email: owner});
-            let herdid = await Herd.findOne({serieinndeling});
-            if (!ownerid) {
-                return res.status(404).send({ msg: "Owner not found" });
-            }
-            if (!herdid) {
-                return res.status(404).send({ msg: "Herd not found" });
-            }
-            ownerid = ownerid._id;
-            herdid = herdid._id;
             const raindeer = new Raindeer({
-                owner: ownerid,
-                serialnumber,
+                owner: owner,
+                serialnumber: serialNumber,
                 name,
-                flokk: herdid,
-                dateofbirth: Date.now()
+                flokk: flokk,
+                dateofbirth: dateOfBirth
             });
             let result = await raindeer.save();
             if (result._id) {
-                res.status(201).send({ msg: "Raindeer created", raindeer: result });
+                res.status(201).send({ msg: "Reinsdyr registrert", result: result });
             } else {
-                res.status(500).send({ msg: "Error creating raindeer" });
+                res.status(500).send({ msg: "Feil ved registrering av Reinsdyr" });
             }
         } catch (error) {
             console.error(error);
@@ -74,7 +64,7 @@ const raindeerController = {
             updateContent.owner = ownerid;
             const raindeer = await Raindeer.findByIdAndUpdate(id, updateContent);
             if (raindeer) {
-                res.status(200).send({ msg: "Raindeer updated", raindeer: updateContent });
+                res.status(200).send({ msg: "Raindeer updated", updateContent: updateContent });
             } else {
                 res.status(404).send({ msg: "Raindeer not found" });
             }
