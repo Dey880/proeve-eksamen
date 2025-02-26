@@ -1,5 +1,4 @@
 const Raindeer = require("../models/RaindeerSchema.js");
-const Herd = require("../models/HerdSchema.js");
 const User = require("../models/UserSchema");
 
 const raindeerController = {

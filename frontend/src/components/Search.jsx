@@ -100,7 +100,7 @@ export default function LandingPage() {
             animal.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             animal.serialnumber.toString().includes(searchQuery) ||
             ownerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            herdName.toLowerCase().includes(searchQuery.toLowerCase())
+            herdName.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
     });
 

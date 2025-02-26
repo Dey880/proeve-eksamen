@@ -7,6 +7,7 @@ const RaindeerSchema = new Schema({
     name: { type: String, required: true },
     flokk: { type: mongoose.Schema.Types.ObjectId, ref: "Herd", required: true },
     dateofbirth: { type: Date, required: true },
+    inTransition: { type: Boolean, default: false },
 });
 
 const Raindeer = model("Raindeer", RaindeerSchema);

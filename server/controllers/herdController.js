@@ -60,25 +60,26 @@ const herdController = {
     editHerd: (async (req, res) => {
         const { id } = req.params;
         const updateContent = req.body;
-        const { owner } = updateContent;
+
         try {
-            let ownerid = await User.findOne({ email: owner });
-            if (!ownerid) {
-                return res.status(404).send({ msg: "Owner not found" });
+            let herd = await Herd.findById(id);
+            if (!herd) {
+                return res.status(404).send({ msg: "Herd not found" });
             }
-            ownerid = ownerid._id;
-            updateContent.owner = ownerid;
-    
+
             if (req.file) {
+                if (herd.buemerke_bilde) {
+                    const oldImagePath = path.join(__dirname, "../uploads", herd.buemerke_bilde);
+                    if (fs.existsSync(oldImagePath)) {
+                        fs.unlinkSync(oldImagePath);
+                    }
+                }
                 updateContent.buemerke_bilde = req.file.filename;
             }
-    
-            const herd = await Herd.findByIdAndUpdate(id, updateContent, { new: true });
-            if (herd) {
-                res.status(200).send({ msg: "Herd updated", herd });
-            } else {
-                res.status(404).send({ msg: "Herd not found" });
-            }
+
+            herd = await Herd.findByIdAndUpdate(id, updateContent, { new: true });
+
+            res.status(200).send({ msg: "Herd updated", herd });
         } catch (error) {
             console.error(error);
             res.status(500).send({ msg: "Internal server error" });
