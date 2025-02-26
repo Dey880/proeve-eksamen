@@ -26,10 +26,25 @@ export default function Profile() {
 
     if (!user) return <div>Er du sikker på at du er logget inn?</div>;
 
+async function handleLogout() {
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/auth/logout`, {
+            withCredentials: true,
+        })
+        if (response.status === 200) {
+            window.location.replace("/");
+        }
+    } catch (error) {
+        console.error("Error logging out:", error);
+    }
+}
+
+    
     return (
         <div>
             <h1>Profil</h1>
             <p>Velkommen, {user.name}!</p>
+            <button onClick={handleLogout}>Logg ut</button>
             <div>
                 <button><a href="/regrein">Registrer Reinsdyr</a></button>
                 <button><a href="/regflokk">Registrer flokk</a></button>

@@ -17,7 +17,9 @@ export default function RegisterReinsdyr() {
     useEffect(() => {
         const fetchHerds = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/herd`);
+                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/herd`, {
+                    withCredentials: true,
+                });
                 if (Array.isArray(response.data.herds)) {
                     const userHerds = response.data.herds.filter((herd) => herd.owner === owner);
                     const sortedHerds = userHerds.sort((a, b) => a.owner.localeCompare(b.owner));

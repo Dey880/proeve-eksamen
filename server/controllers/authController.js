@@ -56,6 +56,14 @@ const authController = {
             res.status(500).send({msg: "Internal server error", error: error});
         }
     }),
+    logout: ((req, res) => {
+        res.cookie("jwt", "", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            expires: new Date(0)
+        });
+        res.status(200).json({ message: "Logged out" });
+    }),
     getUser: (async (req, res) => {
         const { id } = req.params;
         try {

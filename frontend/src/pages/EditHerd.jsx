@@ -86,7 +86,9 @@ export default function EditHerd() {
 
     const handleDelete = async () => {
         try {
-            const response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/herd/${id}`);
+            const response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/herd/${id}`, {
+                withCredentials: true,
+            });
             if (response.status === 200) {
                 window.location.replace("/");
             }

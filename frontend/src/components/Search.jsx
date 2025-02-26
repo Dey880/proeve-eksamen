@@ -95,7 +95,7 @@ export default function LandingPage() {
 
     const filteredAnimals = animals.filter((animal) => {
         const ownerName = owners[animal.owner] || "";
-        const herdName = herd[animal.flokk] || "";
+        const herdName = herd[animal.flokk]?.name || "";
         return (
             animal.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             animal.serialnumber.toString().includes(searchQuery) ||
@@ -107,20 +107,20 @@ export default function LandingPage() {
     return (
         <div className="animals">
             <input type="text"
-            placeholder="Søk fra Navn, Eier, Flokk eller Serienummer."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input"
+                placeholder="Søk fra Navn, Eier, Flokk eller Serienummer."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input"
             />
 
 
     {filteredAnimals.length > 0 ? (
         filteredAnimals.map((animal) => (
-            <div key={animal._id}>
+            <div key={animal._id} className="animal">
                 <h1>Navn: {animal.name}</h1>
                 <h1>Eier: {owners[animal.owner] || "Ukjent Eier"}</h1>
                 <h1>Serialnumber: {animal.serialnumber}</h1>
-                <h1>Fødselsdato: {animal.dateofbirth}</h1>
+                <h1>Fødselsdato: {animal.dateofbirth.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z$/, "")}</h1>
                 <h1>Flokk: {herd[animal.flokk]?.name || "Ukjent Flokk"}</h1>
                 {herd[animal.flokk]?.imageUrl ? (
                     <div>
