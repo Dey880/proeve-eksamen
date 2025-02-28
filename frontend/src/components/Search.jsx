@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "../css/components/Search.css"
+import "../css/components/Search.css";
 
 export default function LandingPage() {
     const [animals, setAnimals] = useState([]);
     const [owners, setOwners] = useState({});
     const [herd, setHerd] = useState({});
     const [searchQuery, setSearchQuery] = useState("");
+    const [loading, setLoading] = useState(true); // Add loading state
 
     useEffect(() => {
         async function GetAllAnimals() {
@@ -14,10 +15,10 @@ export default function LandingPage() {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/raindeer`, {
                     withCredentials: true,
                 });
-    
+
                 const fetchedAnimals = response.data.raindeer || [];
                 setAnimals(fetchedAnimals);
-    
+
                 fetchedAnimals.forEach((animal) => {
                     getOwner(animal.owner);
                     getHerd(animal.flokk);
@@ -37,24 +38,25 @@ export default function LandingPage() {
     function getOwner(ownerId) {
         try {
             axios
-            .get(`${process.env.REACT_APP_BACKEND_URL}/auth/user/${ownerId}`, {
-                withCredentials: true,
-            })
-            .then((response) => {
-                setOwners((prevOwners) => ({
-                    ...prevOwners,
-                    [ownerId]: response.data.user.email,
-                }));
-            })
-            .catch((error) => {
-                if (error.response.status === 404) {
+                .get(`${process.env.REACT_APP_BACKEND_URL}/auth/user/${ownerId}`, {
+                    withCredentials: true,
+                })
+                .then((response) => {
                     setOwners((prevOwners) => ({
                         ...prevOwners,
-                        [ownerId]: "Ukjent Eier",
+                        [ownerId]: response.data.user.email,
                     }));
-                } else {
-                    console.error("Error fetching owner:", error);
-                }})
+                })
+                .catch((error) => {
+                    if (error.response.status === 404) {
+                        setOwners((prevOwners) => ({
+                            ...prevOwners,
+                            [ownerId]: "Ukjent Eier",
+                        }));
+                    } else {
+                        console.error("Error fetching owner:", error);
+                    }
+                });
         } catch (error) {
             console.error(error);
         }
@@ -93,53 +95,61 @@ export default function LandingPage() {
         }
     }
 
+    // Only filter and render animals when data has been fully fetched
+    useEffect(() => {
+        if (Object.keys(owners).length === animals.length && Object.keys(herd).length === animals.length) {
+            setLoading(false);
+        }
+    }, [owners, herd, animals]);
+
     const filteredAnimals = animals.filter((animal) => {
         const ownerName = owners[animal.owner] || "";
         const herdName = herd[animal.flokk]?.name || "";
         return (
-            animal.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            animal.serialnumber.toString().includes(searchQuery) ||
-            ownerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            herdName.name.toLowerCase().includes(searchQuery.toLowerCase())
+            animal?.name?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
+            animal?.serialnumber?.toString()?.includes(searchQuery) ||
+            ownerName?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
+            herdName?.toLowerCase()?.includes(searchQuery.toLowerCase())
         );
     });
 
     return (
         <div className="animals">
-            <input type="text"
+            <input
+                type="text"
                 placeholder="Søk fra Navn, Eier, Flokk eller Serienummer."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="search-input"
             />
 
-
-    {filteredAnimals.length > 0 ? (
-        filteredAnimals.map((animal) => (
-            <div key={animal._id} className="animal">
-                <h1>Navn: {animal.name}</h1>
-                <h1>Eier: {owners[animal.owner] || "Ukjent Eier"}</h1>
-                <h1>Serialnumber: {animal.serialnumber}</h1>
-                <h1>Fødselsdato: {animal.dateofbirth.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z$/, "")}</h1>
-                <h1>Flokk: {herd[animal.flokk]?.name || "Ukjent Flokk"}</h1>
-                {herd[animal.flokk]?.imageUrl ? (
-                    <div>
-                        <h1>Bilde av buemerke:</h1>
-                        <img
-                            src={herd[animal.flokk]?.imageUrl}
-                            alt="Buemerke"
-                            style={{ width: "200px", height: "200px", objectFit: "cover" }}
-                        />
+            {loading ? (
+                <div>Loading...</div>
+            ) : filteredAnimals.length > 0 ? (
+                filteredAnimals.map((animal) => (
+                    <div key={animal._id} className="animal">
+                        <h1>Navn: {animal.name}</h1>
+                        <h1>Eier: {owners[animal.owner] || "Ukjent Eier"}</h1>
+                        <h1>Serialnumber: {animal.serialnumber}</h1>
+                        <h1>Fødselsdato: {animal.dateofbirth.replace(/T\d{2}:\d{2}:\d{2}\.\d{3}Z$/, "")}</h1>
+                        <h1>Flokk: {herd[animal.flokk]?.name || "Ukjent Flokk"}</h1>
+                        {herd[animal.flokk]?.imageUrl ? (
+                            <div>
+                                <h1>Bilde av buemerke:</h1>
+                                <img
+                                    src={herd[animal.flokk]?.imageUrl}
+                                    alt="Buemerke"
+                                    style={{ width: "200px", height: "200px", objectFit: "cover" }}
+                                />
+                            </div>
+                        ) : (
+                            <p>Ingen bilde tilgjengelig</p>
+                        )}
                     </div>
-                ) : (
-                    <p>Ingen bilde tilgjengelig</p>
-                )}
-            </div>
-        ))
-    ) : (
-        <div>Ingen reinsdyr funnet</div>
-    )}
-
+                ))
+            ) : (
+                <div>Ingen reinsdyr funnet</div>
+            )}
         </div>
     );
 }
