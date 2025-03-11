@@ -7,7 +7,7 @@ export default function LandingPage() {
     const [owners, setOwners] = useState({});
     const [herd, setHerd] = useState({});
     const [searchQuery, setSearchQuery] = useState("");
-    const [loading, setLoading] = useState(true); // Add loading state
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function GetAllAnimals() {
@@ -95,7 +95,6 @@ export default function LandingPage() {
         }
     }
 
-    // Only filter and render animals when data has been fully fetched
     useEffect(() => {
         if (Object.keys(owners).length === animals.length && Object.keys(herd).length === animals.length) {
             setLoading(false);
